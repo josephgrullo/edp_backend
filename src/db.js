@@ -1,17 +1,19 @@
 import mongoose from 'mongoose';
 import 'dotenv/config';
 
-const defaultMongoUri = 'mongodb://127.0.0.1:27017/geartrack_db';
-
 export async function connectDB() {
-  const mongoUri = process.env.MONGODB_URI || defaultMongoUri;
+  const mongoUri = process.env.MONGODB_URI;
+
+  if (!mongoUri) {
+    console.error('MONGODB_URI is missing from your .env file.');
+    process.exit(1);
+  }
 
   try {
     await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB successfully.');
+    console.log('Connected to MongoDB Atlas successfully.');
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
-    console.error('Check that MongoDB is running and MONGODB_URI in .env is correct.');
     process.exit(1);
   }
 }
